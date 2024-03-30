@@ -222,17 +222,13 @@ const resolvers = {
       }
       return createdBook
     },
-    editAuthor: (root, args) => {
-      if (!authors.find(author => author.name === args.name)) {
-        return null
-      }
-      else {
-        const author = authors.find(author => author.name === args.name)
-        const updatedAuthor = { ...author, born: args.setBornTo }
-        authors = authors.map(author => author.name === args.name ?
-          updatedAuthor : author)
-        return updatedAuthor
-      }
+    editAuthor: async (root, args) => {
+      const updatedAuthor = await Author.findOneAndUpdate(
+        { name: args.name },
+        { born: args.setBornTo },
+        { new: true }
+      )
+      return updatedAuthor
     }
   }
 }
