@@ -153,7 +153,7 @@ const resolvers = {
     allBooks: async (root, args) => {
       if (!args.author) {
         if (!args.genre) {
-          return Book.find({})
+          return Book.find({}).populate('author')
         }
         else {
           return books.filter(book => book.genres.includes(args.genre))
@@ -206,9 +206,11 @@ const resolvers = {
           })
         }
       }
+      let createdBook
+      book.author = author._id
       try {
-        book.author = author
-        await book.save()
+        createdBook = await book.save()
+        createdBook = await Book.findById(createdBook._id).populate('author')
       } catch (error) {
         throw new GraphQLError('Saving book failed', {
           extensions: {
@@ -218,7 +220,7 @@ const resolvers = {
           }
         })
       }
-      return book
+      return createdBook
     },
     editAuthor: (root, args) => {
       if (!authors.find(author => author.name === args.name)) {
