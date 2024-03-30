@@ -211,11 +211,11 @@ const resolvers = {
           })
         }
       }
-      let createdBook
       book.author = author._id
       try {
-        createdBook = await book.save()
+        let createdBook = await book.save()
         createdBook = await Book.findById(createdBook._id).populate('author')
+        return createdBook        
       } catch (error) {
         throw new GraphQLError('Saving book failed', {
           extensions: {
@@ -225,7 +225,6 @@ const resolvers = {
           }
         })
       }
-      return createdBook
     },
     editAuthor: async (root, args) => {
       const updatedAuthor = await Author.findOneAndUpdate(
