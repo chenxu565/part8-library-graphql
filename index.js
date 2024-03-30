@@ -177,8 +177,13 @@ const resolvers = {
     allAuthors: async () => Author.find({})
   },
   Author: {
-    bookCount: (root) => {
-      return books.filter(book => book.author === root.name).length
+    bookCount: async (root) => {
+      const author = await Author.findOne({name: root.name})
+      if (!author) {
+        return 0
+      }
+      const books = await Book.find({ author: author._id })
+      return books.length
     }
   },
   Mutation: {
@@ -186,7 +191,6 @@ const resolvers = {
       const book = new Book({ ...args })
       let author = await Author.findOne({name: args.author})
       if (! author) {
-        console.log('no author found')
         author = new Author({
           name: args.author,
         })
