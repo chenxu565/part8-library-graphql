@@ -202,13 +202,21 @@ const resolvers = {
         try {
           await author.save()
         } catch (error) {
-          throw new GraphQLError('Saving author failed', {
-            extensions: {
-              code: 'BAD_USER_INPUT',
-              invalidArgs: args.author,
-              error
-            }
-          })
+          if (error.name === 'ValidationError') {
+            throw new GraphQLError('Validation Error: ' + error.message, {
+              extensions: {
+                code: 'BAD_USER_INPUT',
+                invalidArgs: {field: 'author', value: args.author},
+              }
+            })
+          } else {
+            throw new GraphQLError('Saving author failed', {
+              extensions: {
+                code: 'INTERNAL_SERVER_ERROR',
+                error: 'An unexpected error occurred'
+              }
+            })
+          }
         }
       }
       book.author = author._id
@@ -217,22 +225,57 @@ const resolvers = {
         createdBook = await Book.findById(createdBook._id).populate('author')
         return createdBook        
       } catch (error) {
-        throw new GraphQLError('Saving book failed', {
-          extensions: {
-            code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
-            error
-          }
-        })
+        if (error.name === 'ValidationError') {
+          throw new GraphQLError('Validation Error: ' + error.message, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: {field: 'title', value: args.title},
+            }
+          })
+        } else {
+          throw new GraphQLError('Saving book failed', {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR',
+              error: 'An unexpected error occurred'
+            }
+          })
+        }
       }
     },
     editAuthor: async (root, args) => {
-      const updatedAuthor = await Author.findOneAndUpdate(
-        { name: args.name },
-        { born: args.setBornTo },
-        { new: true }
-      )
-      return updatedAuthor
+      const authorFound = await Author.findOne({name: args.name})
+      if (!authorFound) {
+        console.log('Author not found')
+        throw new GraphQLError('Author not found', {
+          extensions: {
+            code: 'NOT_FOUND',
+            message: `No author found with the name ${args.name}`
+          }
+        })
+      }
+      try {
+        const updatedAuthor = await Author.findOneAndUpdate(
+          { name: args.name },
+          { born: args.setBornTo },
+          { new: true }
+        )
+        return updatedAuthor        
+      } catch (error) {
+        if (error.name === 'ValidationError') {
+          throw new GraphQLError('Validation Error: ' + error.message, {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          })
+        } else {
+          throw new GraphQLError('Error updating author', {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR',
+              message: 'An unexpected error occurred during author update'
+            }
+          })
+        }
+      }
     }
   }
 }
