@@ -143,6 +143,7 @@ const typeDefs = `
     me: User
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String!]!
   }
 
   type Mutation {
@@ -178,6 +179,10 @@ const resolvers = {
       return context.currentUser;
     },
     allAuthors: async () => Author.find({}),
+    allGenres: async () => {
+      const books = await Book.find({});
+      return [...new Set(books.flatMap((book) => book.genres))];
+    },
     allBooks: async (root, args) => {
       if (!args.author) {
         if (!args.genre) {
