@@ -4,7 +4,10 @@ import { GET_ALL_AUTHORS } from '../queries';
 import BirthYearEditor from './BirthYearForm';
 
 const Authors = (props) => {
-  const result = useQuery(GET_ALL_AUTHORS);
+  const result = useQuery(GET_ALL_AUTHORS, {
+    skip: !props.show,
+    fetchPolicy: 'cache-and-network'
+  });
 
   if (result.loading) {
     return <div>loading...</div>;
