@@ -16,6 +16,15 @@ export const GET_ALL_GENRES = gql`
   }
 `
 
+export const GET_ME = gql`
+  query {
+    me {
+      username
+      favoriteGenre
+    }
+  }
+`
+
 export const GET_ALL_BOOKS = gql`
   query 
     getBooks(
