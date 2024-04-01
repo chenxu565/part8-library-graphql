@@ -32,7 +32,7 @@ const LoginForm = ({show, token, setToken, setPage}) => {
   
   return (
     <div>
-      <form onSubmit={submit}>
+      <form id="loginForm" onSubmit={submit}>
         <div>
           username <input
             value={username}

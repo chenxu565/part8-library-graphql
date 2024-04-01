@@ -23,7 +23,7 @@ const BirthYearEditor = ({authors}) => {
   return (
     <div>
       <h2>Set birthyear</h2>
-      <form onSubmit={submit}>
+      <form id="birthYearForms" onSubmit={submit}>
         <div>
           name
           <select
