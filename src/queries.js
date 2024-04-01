@@ -11,18 +11,25 @@ export const GET_ALL_AUTHORS = gql`
 `;
 
 export const GET_ALL_BOOKS = gql`
-  query {
-    allBooks {
-      title
-      published
-      genres
-      author {
-        bookCount
-        born
-        id
-        name
+  query 
+    getBooks(
+      $author: String,
+      $genre: String
+    ) {
+      allBooks(
+        author: $author,
+        genre: $genre,
+      ) {
+        title
+        published
+        genres
+        author {
+          bookCount
+          born
+          id
+          name
+        }
       }
-    }
   }`
 
 export const ADD_BOOK = gql`
