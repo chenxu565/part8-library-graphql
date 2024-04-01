@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { GET_ALL_BOOKS, GET_ALL_GENRES } from '../queries';
 
 const Books = (props) => {
-  const [genreTab, setGenreTab ] = useState("all genres")
+  const [genreTab, setGenreTab ] = useState(props.genre??"all genres")
   const booksResult = useQuery(GET_ALL_BOOKS, 
     {
       skip: !props.show,
@@ -42,21 +42,25 @@ const Books = (props) => {
 
   return (
     <div>
-      <h2>Books</h2>
-      {
-        buttonGenres.map(
-          (genre) =>
-          (
-            <button 
-              key={genre}
-              onClick={()=>toggleGenre(genre)}
-            >
-              {genre}
-            </button>
+      { !props.genre &&
+        <>
+        <h2>Books</h2>
+        {
+          buttonGenres.map(
+            (genre) =>
+            (
+              <button 
+                key={genre}
+                onClick={()=>toggleGenre(genre)}
+              >
+                {genre}
+              </button>
+            )
           )
-        )
+        }
+        {genreTab==="all genres"? <p><b>All genres</b></p> : <p>in genre <b>{genreTab}</b></p>}
+        </>
       }
-      {genreTab==="all genres"? <p><b>All genres</b></p> : <p>in genre <b>{genreTab}</b></p>}
       <table>
         <tbody>
           <tr>
