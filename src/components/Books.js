@@ -1,66 +1,61 @@
-import { useQuery } from '@apollo/client';
-import { useState } from 'react';
-import { GET_ALL_BOOKS, GET_ALL_GENRES } from '../queries';
+import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import { GET_ALL_BOOKS, GET_ALL_GENRES } from "../queries";
 
 const Books = (props) => {
-  const [genreTab, setGenreTab ] = useState(props.genre??"all genres")
-  const booksResult = useQuery(GET_ALL_BOOKS, 
-    {
-      skip: !props.show,
-      fetchPolicy: "cache-and-network",
-      variables: {
-        genre: genreTab==="all genres"? null: genreTab
-      }
-    });
+  const [genreTab, setGenreTab] = useState(props.genre ?? "all genres");
+  const booksResult = useQuery(GET_ALL_BOOKS, {
+    skip: !props.show,
+    fetchPolicy: "cache-and-network",
+    variables: {
+      genre: genreTab === "all genres" ? null : genreTab,
+    },
+  });
 
-  const genresResult = useQuery(GET_ALL_GENRES, 
-    {
-      skip: !props.show,
-      fetchPolicy: "cache-and-network"
-    }
-  )
+  const genresResult = useQuery(GET_ALL_GENRES, {
+    skip: !props.show,
+    fetchPolicy: "cache-and-network",
+  });
 
   if (booksResult.loading) {
     return <div>loading...</div>;
   }
-  
+
   if (!props.show) {
-    return null
+    return null;
   }
   const books = booksResult.data?.allBooks || [];
   const uniqueGenres = genresResult.data?.allGenres || [];
-  const buttonGenres = [...uniqueGenres, 'all genres']
+  const buttonGenres = [...uniqueGenres, "all genres"];
 
   const toggleGenre = (genre) => {
     setGenreTab(genre);
-    booksResult.refetch(
-      {
-        genre: genre==="all genres"? null: genre
-      }
-    )
-  }
+    booksResult.refetch({
+      genre: genre === "all genres" ? null : genre,
+    });
+  };
 
   return (
     <div>
-      { !props.genre &&
+      {!props.genre && (
         <>
-        <h2>Books</h2>
-        {
-          buttonGenres.map(
-            (genre) =>
-            (
-              <button 
-                key={genre}
-                onClick={()=>toggleGenre(genre)}
-              >
-                {genre}
-              </button>
-            )
-          )
-        }
-        {genreTab==="all genres"? <p><b>All genres</b></p> : <p>in genre <b>{genreTab}</b></p>}
+          <h2>Books</h2>
+          {buttonGenres.map((genre) => (
+            <button key={genre} onClick={() => toggleGenre(genre)}>
+              {genre}
+            </button>
+          ))}
+          {genreTab === "all genres" ? (
+            <p>
+              <b>All genres</b>
+            </p>
+          ) : (
+            <p>
+              in genre <b>{genreTab}</b>
+            </p>
+          )}
         </>
-      }
+      )}
       <table>
         <tbody>
           <tr>
@@ -78,7 +73,7 @@ const Books = (props) => {
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default Books
+export default Books;

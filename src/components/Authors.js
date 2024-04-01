@@ -1,12 +1,12 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client";
 
-import { GET_ALL_AUTHORS } from '../queries';
-import BirthYearEditor from './BirthYearForm';
+import { GET_ALL_AUTHORS } from "../queries";
+import BirthYearEditor from "./BirthYearForm";
 
 const Authors = (props) => {
   const result = useQuery(GET_ALL_AUTHORS, {
     skip: !props.show,
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
   if (result.loading) {
@@ -14,9 +14,9 @@ const Authors = (props) => {
   }
 
   if (!props.show) {
-    return null
+    return null;
   }
-  
+
   const authors = result.data.allAuthors;
 
   return (
@@ -38,13 +38,9 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      {
-        props.token ?
-        <BirthYearEditor authors={authors}/> :
-        null
-      }
+      {props.token ? <BirthYearEditor authors={authors} /> : null}
     </div>
-  )
-}
+  );
+};
 
-export default Authors
+export default Authors;

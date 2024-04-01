@@ -5,26 +5,28 @@ import Books from "./Books";
 const Recommend = (props) => {
   const result = useQuery(GET_ME, {
     skip: !props.show,
-    fetchPolicy: 'cache-and-network'    
+    fetchPolicy: "cache-and-network",
   });
 
   if (result.loading) {
     return <div>loading...</div>;
   }
-  
+
   if (!props.show) {
-    return null
+    return null;
   }
 
-  const genre = result.data?.me.favoriteGenre
+  const genre = result.data?.me.favoriteGenre;
 
   return (
     <div>
       <h2>Recommendations</h2>
-      <p>books in your favorite genre <b>{genre}</b></p>
+      <p>
+        books in your favorite genre <b>{genre}</b>
+      </p>
       <Books show={true} genre={genre} />
     </div>
-  )
-}
+  );
+};
 
 export default Recommend;
