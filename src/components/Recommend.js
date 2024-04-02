@@ -8,12 +8,12 @@ const Recommend = (props) => {
     fetchPolicy: "cache-and-network",
   });
 
-  if (result.loading) {
-    return <div>loading...</div>;
-  }
-
   if (!props.show) {
     return null;
+  }
+
+  if (result.loading) {
+    return <div>loading...</div>;
   }
 
   const genre = result.data?.me.favoriteGenre;

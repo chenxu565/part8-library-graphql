@@ -16,14 +16,15 @@ const Books = (props) => {
     skip: !props.show,
     fetchPolicy: "cache-and-network",
   });
+  
+  if (!props.show) {
+    return null;
+  }
 
   if (booksResult.loading) {
     return <div>loading...</div>;
   }
 
-  if (!props.show) {
-    return null;
-  }
   const books = booksResult.data?.allBooks || [];
   const uniqueGenres = genresResult.data?.allGenres || [];
   const buttonGenres = [...uniqueGenres, "all genres"];

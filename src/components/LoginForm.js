@@ -20,15 +20,15 @@ const LoginForm = ({ show, token, setToken, setPage }) => {
       setPage("authors");
     }
   }, [result.data, setPage, setToken]);
+  
+  if (!show) {
+    return null;
+  }
 
   const submit = async (event) => {
     event.preventDefault();
     login({ variables: { username, password } });
   };
-
-  if (!show) {
-    return null;
-  }
 
   return (
     <div>
