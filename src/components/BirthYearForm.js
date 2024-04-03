@@ -8,11 +8,18 @@ const BirthYearEditor = ({ authors }) => {
   const [born, setBorn] = useState("");
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [{ query: GET_ALL_AUTHORS }],
     onCompleted: () => {
       setName("");
       setBorn("");
     },
+    update: (cache, response) => {
+      cache.updateQuery({ query: GET_ALL_AUTHORS }, ({ allAuthors }) => {
+        const editAuthor = response.data.editAuthor
+        return {
+          allAuthors: allAuthors.map((a) => a.name === editAuthor.name? { ...a, born: editAuthor.born } : a)
+        }
+      })
+    }
   });
 
   const submit = async (event) => {

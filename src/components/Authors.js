@@ -6,7 +6,7 @@ import BirthYearEditor from "./BirthYearForm";
 const Authors = (props) => {
   const result = useQuery(GET_ALL_AUTHORS, {
     skip: !props.show,
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
   });
 
   if (!props.show) {
