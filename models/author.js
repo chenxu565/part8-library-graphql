@@ -16,8 +16,8 @@ const schema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Book",
-    }
-  ]
+    },
+  ],
 });
 
 schema.plugin(uniqueValidator);
