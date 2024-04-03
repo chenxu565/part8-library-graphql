@@ -20,7 +20,7 @@ const LoginForm = ({ show, token, setToken, setPage }) => {
       setPage("authors");
     }
   }, [result.data, setPage, setToken]);
-  
+
   if (!show) {
     return null;
   }

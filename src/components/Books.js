@@ -16,7 +16,7 @@ const Books = (props) => {
     skip: !props.show,
     fetchPolicy: "cache-and-network",
   });
-  
+
   if (!props.show) {
     return null;
   }
