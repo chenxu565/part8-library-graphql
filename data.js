@@ -1,4 +1,3 @@
-
 let authors = [
   {
     name: "Robert Martin",
