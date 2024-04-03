@@ -14,6 +14,13 @@ const NewBook = (props) => {
     onError: (error) => {
       console.log(error);
     },
+    onCompleted: () => {
+      setTitle("");
+      setPublished("");
+      setAuthor("");
+      setGenres([]);
+      setGenre("");
+    }
   });
 
   if (!props.show) {
@@ -27,12 +34,6 @@ const NewBook = (props) => {
     createBook({
       variables: { title, author, published: parseInt(published), genres },
     });
-
-    setTitle("");
-    setPublished("");
-    setAuthor("");
-    setGenres([]);
-    setGenre("");
   };
 
   const addGenre = () => {

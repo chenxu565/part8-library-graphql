@@ -9,15 +9,15 @@ const BirthYearEditor = ({ authors }) => {
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: GET_ALL_AUTHORS }],
+    onCompleted: () => {
+     setName("");
+     setBorn("");     
+    }
   });
 
   const submit = async (event) => {
     event.preventDefault();
-
     editAuthor({ variables: { name, setBornTo: parseInt(born) } });
-
-    setName("");
-    setBorn("");
   };
 
   return (
