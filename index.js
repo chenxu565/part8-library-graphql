@@ -208,14 +208,7 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: async (root) => {
-      const author = await Author.findOne({ name: root.name });
-      if (!author) {
-        return 0;
-      }
-      const books = await Book.find({ author: author._id });
-      return books.length;
-    },
+    bookCount: async (root) => root.books.length
   },
   Mutation: {
     addBook: async (root, args, context) => {
@@ -256,10 +249,10 @@ const resolvers = {
         }
       }
       book.author = author._id;
+      let createdBook;
       try {
-        let createdBook = await book.save();
-        createdBook = await Book.findById(createdBook._id).populate("author");
-        return createdBook;
+        createdBook = await book.save();
+        createdBook = await createdBook.populate("author");
       } catch (error) {
         if (error.name === "ValidationError") {
           throw new GraphQLError("Validation Error: " + error.message, {
@@ -277,6 +270,22 @@ const resolvers = {
           });
         }
       }
+      try {
+        author.books = author.books.concat(createdBook);
+        await author.save()
+      } catch (error) {
+        if (error.name === "ValidationError") {
+          throw new GraphQLError("Validation Error: " + error.message)
+        } else {
+          throw new GraphQLError("Saving author with new book failed", {
+            extensions: {
+              code: "INTERNAL_SERVER_ERROR",
+              error: "An unexpected error occurred",
+            },
+          });
+        }
+      }
+      return createdBook;
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser;
