@@ -20,7 +20,7 @@ const NewBook = (props) => {
       setAuthor("");
       setGenres([]);
       setGenre("");
-    }
+    },
   });
 
   if (!props.show) {
