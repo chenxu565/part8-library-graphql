@@ -5,7 +5,7 @@ import Books from "./Books";
 const Recommend = (props) => {
   const result = useQuery(GET_ME, {
     skip: !props.show,
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
   });
 
   if (!props.show) {
@@ -13,7 +13,7 @@ const Recommend = (props) => {
   }
 
   if (result.loading) {
-    return <div>loading...</div>;
+    return <div>loading user...</div>;
   }
 
   const genre = result.data?.me.favoriteGenre;

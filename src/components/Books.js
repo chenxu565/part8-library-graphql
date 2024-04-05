@@ -6,7 +6,7 @@ const Books = (props) => {
   const [genreTab, setGenreTab] = useState(props.genre ?? "all genres");
   const booksResult = useQuery(GET_ALL_BOOKS, {
     skip: !props.show,
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     variables: {
       genre: genreTab === "all genres" ? null : genreTab,
     },
@@ -14,7 +14,7 @@ const Books = (props) => {
 
   const genresResult = useQuery(GET_ALL_GENRES, {
     skip: !props.show,
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
   });
 
   if (!props.show) {
