@@ -11,6 +11,7 @@ const AUTHOR_DETAILS = gql`
 
 const BOOK_DETAILS = gql`
   fragment BookDetails on Book {
+    id
     title
     published
     genres
@@ -18,7 +19,7 @@ const BOOK_DETAILS = gql`
 `;
 
 export const GET_ALL_AUTHORS = gql`
-  query {
+  query getAuthors{
     allAuthors {
       ...AuthorDetails
     }
@@ -27,13 +28,13 @@ export const GET_ALL_AUTHORS = gql`
 `;
 
 export const GET_ALL_GENRES = gql`
-  query {
+  query getGenres{
     allGenres
   }
 `;
 
 export const GET_ME = gql`
-  query {
+  query getMe{
     me {
       username
       favoriteGenre
