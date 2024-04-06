@@ -1,20 +1,11 @@
 import { useState } from "react";
-import { useMutation, useLazyQuery } from "@apollo/client";
-import { GET_ME, LOGIN } from "../queries";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../queries";
 
-const LoginForm = ({ show, token, setToken, setPage }) => {
+const LoginForm = ({ show, token, setToken, setPage, getMe }) => {
   const [username, setUsername] = useState("mluukkai");
   const [password, setPassword] = useState("secret");
-
-  const [getMe] = useLazyQuery(GET_ME, {
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      if (data.me) {
-        setPage("authors");
-      }
-    },
-  });
-
+  
   const [login] = useMutation(LOGIN, {
     onError: (error) => {
       console.log(error);
@@ -23,6 +14,7 @@ const LoginForm = ({ show, token, setToken, setPage }) => {
       const token = data.login.value;
       setToken(token);
       localStorage.setItem("library-user-token", token);
+      setPage("authors");
       getMe();
     },
   });

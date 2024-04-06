@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useLazyQuery } from "@apollo/client";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
@@ -12,12 +12,17 @@ const App = () => {
   const [token, setToken] = useState(null);
   const client = useApolloClient();
 
+  const [getMe] = useLazyQuery(GET_ME, {
+    fetchPolicy: "network-only"
+  });
+
   useEffect(() => {
     const storedToken = localStorage.getItem("library-user-token");
     if (storedToken) {
       setToken(storedToken);
+      getMe();
     }
-  }, []);
+  }, [getMe]);
 
   const logout = () => {
     setToken(null);
@@ -56,6 +61,7 @@ const App = () => {
         token={token}
         setToken={setToken}
         setPage={setPage}
+        getMe={getMe}
       />
 
       <Recommend show={page === "recommend"} />
