@@ -19,7 +19,7 @@ const BOOK_DETAILS = gql`
 `;
 
 export const GET_ALL_AUTHORS = gql`
-  query getAuthors{
+  query getAuthors {
     allAuthors {
       ...AuthorDetails
     }
@@ -28,13 +28,13 @@ export const GET_ALL_AUTHORS = gql`
 `;
 
 export const GET_ALL_GENRES = gql`
-  query getGenres{
+  query getGenres {
     allGenres
   }
 `;
 
 export const GET_ME = gql`
-  query getMe{
+  query getMe {
     me {
       id
       username
