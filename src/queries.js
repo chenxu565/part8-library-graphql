@@ -36,6 +36,7 @@ export const GET_ALL_GENRES = gql`
 export const GET_ME = gql`
   query getMe{
     me {
+      id
       username
       favoriteGenre
     }
