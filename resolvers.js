@@ -123,6 +123,7 @@ const resolvers = {
         }
       }
 
+      createdBook = await createdBook.populate("author");
       pubsub.publish("BOOK_ADDED", { bookAdded: createdBook });
 
       return createdBook;
