@@ -4,7 +4,7 @@ import { GET_ALL_BOOKS } from "../queries";
 import BooksToShow from "./BooksToShow";
 
 const Books = (props) => {
-  const [genreTab, setGenreTab] = useState(props.genre ?? "all genres");
+  const [genreTab, setGenreTab] = useState("all genres");
   const booksResult = useQuery(GET_ALL_BOOKS);
 
   if (!props.show) {
