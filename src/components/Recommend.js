@@ -3,7 +3,7 @@ import { GET_ME, GET_ALL_BOOKS } from "../queries";
 import BooksToShow from "./BooksToShow";
 
 const Recommend = (props) => {
-  const meResult = useQuery(GET_ME);
+  const meResult = useQuery(GET_ME, { fetchPolicy: "cache-only" });
   const booksResult = useQuery(GET_ALL_BOOKS);
 
   if (!props.show) {
