@@ -1,22 +1,23 @@
 import { useQuery } from "@apollo/client";
-import { GET_ME } from "../queries";
-import Books from "./Books";
+import { GET_ME, GET_ALL_BOOKS } from "../queries";
+import BooksToShow from "./BooksToShow";
 
 const Recommend = (props) => {
-  const result = useQuery(GET_ME, {
-    skip: !props.show,
-    fetchPolicy: "cache-first",
-  });
+  const meResult = useQuery(GET_ME);
+  const booksResult = useQuery(GET_ALL_BOOKS);
 
   if (!props.show) {
     return null;
   }
 
-  if (result.loading) {
-    return <div>loading user...</div>;
+  if (meResult.loading || booksResult.loading) {
+    return <div>loading ...</div>;
   }
 
-  const genre = result.data?.me.favoriteGenre;
+  const genre = meResult.data?.me.favoriteGenre || "";
+
+  const booksToShow =
+    booksResult.data?.allBooks.filter((b) => b.genres.includes(genre)) || [];
 
   return (
     <div>
@@ -24,7 +25,7 @@ const Recommend = (props) => {
       <p>
         books in your favorite genre <b>{genre}</b>
       </p>
-      <Books show={true} genre={genre} />
+      <BooksToShow booksToShow={booksToShow} />
     </div>
   );
 };
