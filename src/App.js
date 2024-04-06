@@ -5,6 +5,7 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
+import { GET_ME } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -21,7 +22,10 @@ const App = () => {
   const logout = () => {
     setToken(null);
     localStorage.clear();
-    client.resetStore();
+    client.cache.writeQuery({
+      query: GET_ME,
+      data: { me: null },
+    });
     setPage("login");
   };
 
