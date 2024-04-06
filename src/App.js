@@ -13,7 +13,7 @@ const App = () => {
   const client = useApolloClient();
 
   const [getMe] = useLazyQuery(GET_ME, {
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
   });
 
   useEffect(() => {
