@@ -5,7 +5,13 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
-import { GET_ME, BOOK_ADDED, GET_ALL_AUTHORS, GET_ALL_BOOKS } from "./queries";
+import {
+  GET_ME,
+  BOOK_ADDED,
+  GET_ALL_AUTHORS,
+  GET_ALL_BOOKS,
+  AUTHOR_BIRTH_YEAR_EDITED,
+} from "./queries";
 
 export const updateAddedBookCache = (cache, addedBook) => {
   cache.updateQuery({ query: GET_ALL_AUTHORS }, ({ allAuthors }) => {
@@ -29,6 +35,20 @@ export const updateAddedBookCache = (cache, addedBook) => {
   });
 };
 
+export const updateEditedAuthorBirthYearCache = (cache, editedAuthor) => {
+  cache.updateQuery({ query: GET_ALL_AUTHORS }, ({ allAuthors }) => {
+    const authorToUpdate = allAuthors.find((a) => a.id === editedAuthor.id);
+    if (authorToUpdate && authorToUpdate.born !== editedAuthor.born) {
+      return {
+        allAuthors: allAuthors.map((a) =>
+          a.id === editedAuthor.id ? { ...a, born: editedAuthor.born } : a,
+        ),
+      };
+    }
+    return { allAuthors };
+  });
+};
+
 const App = () => {
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState(null);
@@ -42,6 +62,13 @@ const App = () => {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded;
       updateAddedBookCache(client.cache, addedBook);
+    },
+  });
+
+  useSubscription(AUTHOR_BIRTH_YEAR_EDITED, {
+    onData: ({ data }) => {
+      const authorToUpdate = data.data.authorUpdated;
+      updateEditedAuthorBirthYearCache(client.cache, authorToUpdate);
     },
   });
 

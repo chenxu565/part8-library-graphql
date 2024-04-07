@@ -108,3 +108,12 @@ export const BOOK_ADDED = gql`
   ${BOOK_DETAILS}
   ${AUTHOR_DETAILS}
 `;
+
+export const AUTHOR_BIRTH_YEAR_EDITED = gql`
+  subscription {
+    authorUpdated {
+      ...AuthorDetails
+    }
+  }
+  ${AUTHOR_DETAILS}
+`;

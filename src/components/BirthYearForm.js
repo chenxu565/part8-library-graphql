@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { useMutation } from "@apollo/client";
-import { EDIT_AUTHOR, GET_ALL_AUTHORS } from "../queries";
+import { EDIT_AUTHOR } from "../queries";
+import { updateEditedAuthorBirthYearCache } from "../App";
 
 const BirthYearEditor = ({ authors }) => {
   const [name, setName] = useState("");
@@ -13,14 +14,7 @@ const BirthYearEditor = ({ authors }) => {
       setBorn("");
     },
     update: (cache, response) => {
-      cache.updateQuery({ query: GET_ALL_AUTHORS }, ({ allAuthors }) => {
-        const editAuthor = response.data.editAuthor;
-        return {
-          allAuthors: allAuthors.map((a) =>
-            a.name === editAuthor.name ? { ...a, born: editAuthor.born } : a,
-          ),
-        };
-      });
+      updateEditedAuthorBirthYearCache(cache, response.data.editAuthor);
     },
   });
 
