@@ -60,6 +60,10 @@ const typeDefs = `
   type Subscription {
     bookAdded: Book!
   }
+
+  type Subscription {
+    authorUpdated: Author!
+  }
 `;
 
 module.exports = typeDefs;

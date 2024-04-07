@@ -155,6 +155,7 @@ const resolvers = {
           { born: args.setBornTo },
           { new: true },
         );
+        pubsub.publish("AUTHOR_UPDATED", { authorUpdated: updatedAuthor });
         return updatedAuthor;
       } catch (error) {
         if (error.name === "ValidationError") {
@@ -209,6 +210,9 @@ const resolvers = {
   Subscription: {
     bookAdded: {
       subscribe: () => pubsub.asyncIterator("BOOK_ADDED"),
+    },
+    authorUpdated: {
+      subscribe: () => pubsub.asyncIterator("AUTHOR_UPDATED"),
     },
   },
 };
