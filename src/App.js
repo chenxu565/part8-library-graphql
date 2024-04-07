@@ -1,11 +1,33 @@
 import { useState, useEffect } from "react";
-import { useApolloClient, useLazyQuery } from "@apollo/client";
+import { useApolloClient, useLazyQuery, useSubscription } from "@apollo/client";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
-import { GET_ME } from "./queries";
+import { GET_ME, BOOK_ADDED, GET_ALL_AUTHORS, GET_ALL_BOOKS } from "./queries";
+
+export const updateCache = (cache, addedBook) => {
+  cache.updateQuery({ query: GET_ALL_AUTHORS }, ({ allAuthors }) => {
+    const newAuthorName = addedBook.author.name;
+    if (!allAuthors.find((a) => a.name === newAuthorName)) {
+      return {
+        allAuthors: allAuthors.concat(addedBook.author),
+      };
+    }
+    return { allAuthors };
+  });
+
+  cache.updateQuery({ query: GET_ALL_BOOKS }, ({ allBooks }) => {
+    if (!allBooks.find((b) => b.id === addedBook.id)) {
+      window.alert(`New book added: ${addedBook.title}`);
+      return {
+        allBooks: allBooks.concat(addedBook),
+      };
+    }
+    return { allBooks };
+  });
+};
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -14,6 +36,13 @@ const App = () => {
 
   const [getMe] = useLazyQuery(GET_ME, {
     fetchPolicy: "network-only",
+  });
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded;
+      updateCache(client.cache, addedBook);
+    },
   });
 
   useEffect(() => {
