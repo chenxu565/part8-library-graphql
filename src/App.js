@@ -7,7 +7,7 @@ import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
 import { GET_ME, BOOK_ADDED, GET_ALL_AUTHORS, GET_ALL_BOOKS } from "./queries";
 
-export const updateCache = (cache, addedBook) => {
+export const updateAddedBookCache = (cache, addedBook) => {
   cache.updateQuery({ query: GET_ALL_AUTHORS }, ({ allAuthors }) => {
     const newAuthorName = addedBook.author.name;
     if (!allAuthors.find((a) => a.name === newAuthorName)) {
@@ -41,7 +41,7 @@ const App = () => {
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded;
-      updateCache(client.cache, addedBook);
+      updateAddedBookCache(client.cache, addedBook);
     },
   });
 

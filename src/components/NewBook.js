@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 
 import { ADD_BOOK } from "../queries";
-import { updateCache } from "../App";
+import { updateAddedBookCache } from "../App";
 
 const NewBook = (props) => {
   const [title, setTitle] = useState("");
@@ -23,7 +23,7 @@ const NewBook = (props) => {
       setGenre("");
     },
     update: (cache, response) => {
-      updateCache(cache, response.data.addBook);
+      updateAddedBookCache(cache, response.data.addBook);
     },
   });
 
